@@ -1,6 +1,7 @@
 package com.sample.stepupandroid;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,7 +14,7 @@ import android.widget.TextView;
  */
 public class ProtectedActivity extends AppCompatActivity {
     private TextView helloTextView, errorMsgTextView;
-    private Button getBalanceButton, transferFundsButton;
+    private Button getBalanceButton, transferFundsButton, logoutButton;
 
     private final String DEBUG_NAME = "ProtectedActivity";
 
@@ -23,12 +24,14 @@ public class ProtectedActivity extends AppCompatActivity {
         Log.d(DEBUG_NAME, "onCreate");
 
         setContentView(R.layout.activity_protected);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.actionbar_with_logout_button);
 
         //Initialize the UI elements
         helloTextView = (TextView)findViewById(R.id.HelloTextView);
         getBalanceButton = (Button)findViewById(R.id.getBalance);
         transferFundsButton = (Button)findViewById(R.id.transferFunds);
+        logoutButton = (Button)findViewById(R.id.logout);
         errorMsgTextView = (TextView)findViewById(R.id.errorMsg);
         helloTextView.setText("Hello User");
         errorMsgTextView.setText("Errors here...");
@@ -44,6 +47,13 @@ public class ProtectedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(DEBUG_NAME, "transferFundsButton clicked");
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(DEBUG_NAME, "logoutButton clicked");
             }
         });
     }
