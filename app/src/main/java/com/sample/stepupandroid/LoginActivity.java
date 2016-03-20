@@ -1,7 +1,10 @@
 package com.sample.stepupandroid;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,13 +29,25 @@ public class LoginActivity extends AppCompatActivity {
     private TextView errorMsgDisplay;
 
     private LoginActivity _this;
+    private final String DEBUG_NAME = "LoginActivity";
+    private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver;
+
+    @Override
+    protected void onStart() {
+        Log.d(DEBUG_NAME, "onStart");
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
+        LocalBroadcastManager.getInstance(this).registerReceiver(loginErrorReceiver, new IntentFilter(Constants.ACTION_LOGIN_FAILURE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(DEBUG_NAME, "onCreate");
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
         _this = this;
 
@@ -63,10 +79,54 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Login required
+        loginRequiredReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, final Intent intent) {
+                Log.d(DEBUG_NAME, "loginRequiredReceiver");
+                Runnable run = new Runnable() {
+                    public void run() {
+                        //Set error message:
+                        errorMsgDisplay.setText(intent.getStringExtra("errorMsg"));
+                    }
+                };
+                _this.runOnUiThread(run);
+            }
+        };
+
+        //Login success
+        loginSuccessReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(DEBUG_NAME, "loginSuccessReceiver");
+                //Go to the protected area
+                Intent openProtectedActivity = new Intent(_this, ProtectedActivity.class);
+                _this.startActivity(openProtectedActivity);
+            }
+        };
+
+        //Login error receiver
+        loginErrorReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(DEBUG_NAME, "loginErrorReceiver");
+                errorMsgDisplay.setText("");
+                alertError(intent.getStringExtra("errorMsg"));
+            }
+        };
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(DEBUG_NAME,"onStop");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(loginErrorReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
+        super.onStop();
     }
 
     public void alertError(final String msg) {
-
+        Log.d(DEBUG_NAME, "alertError");
         Runnable run = new Runnable() {
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(_this);

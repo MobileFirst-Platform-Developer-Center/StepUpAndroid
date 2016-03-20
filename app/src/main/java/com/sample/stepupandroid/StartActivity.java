@@ -7,15 +7,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.worklight.wlclient.api.WLClient;
 
-/**
- * Created by shmulikb on 14/03/16.
- */
 public class StartActivity extends AppCompatActivity {
     private StartActivity _this;
     private BroadcastReceiver loginSuccessReceiver, loginRequiredReceiver;
+    private final String DEBUG_NAME = "StartActivity";
 
     //********************************
     // onCreate
@@ -23,6 +22,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(DEBUG_NAME, "onCreate");
         //setContentView(R.layout.activity_start);
 
         _this = this;
@@ -37,6 +37,7 @@ public class StartActivity extends AppCompatActivity {
         loginSuccessReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d(DEBUG_NAME, "loginSuccessReceiver");
                 //Go to the protected area
                 Intent openProtectedScreen = new Intent(_this, ProtectedActivity.class);
                 _this.startActivity(openProtectedScreen);
@@ -47,6 +48,7 @@ public class StartActivity extends AppCompatActivity {
         loginRequiredReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d(DEBUG_NAME, "loginRequiredReceiver");
                 //Open login screen
                 Intent openLoginScreen = new Intent(_this, LoginActivity.class);
                 _this.startActivity(openLoginScreen);
@@ -65,6 +67,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(DEBUG_NAME, "onStart");
 
         LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
@@ -77,6 +80,7 @@ public class StartActivity extends AppCompatActivity {
     //********************************
     @Override
     protected void onStop() {
+        Log.d(DEBUG_NAME, "onStop");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         super.onStop();

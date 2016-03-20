@@ -22,51 +22,52 @@ limitations under the License.
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".LoginActivity">
+    tools:context=".ProtectedActivity">
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/usernameInput"
+        android:id="@+id/HelloTextView"
+        android:textSize="18dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:hint="Username" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/passwordInput"
-        android:layout_below="@+id/usernameInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/usernameInput"
-        android:layout_alignEnd="@+id/usernameInput"
-        android:hint="Password" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/login"
-        android:layout_below="@+id/passwordInput"
+        android:text="Get Balance"
+        android:id="@+id/getBalance"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/HelloTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/passwordInput"
-        android:layout_alignEnd="@+id/passwordInput" />
+        android:layout_alignRight="@+id/HelloTextView"
+        android:layout_alignEnd="@+id/HelloTextView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transfer Funds"
+        android:id="@+id/transferFunds"
+        android:layout_below="@+id/getBalance"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/getBalance"
+        android:layout_alignEnd="@+id/getBalance" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/errorMsg"
-        android:textColor="@color/colorError"
+        android:layout_marginTop="10dp"
         android:textSize="18dp"
-        android:layout_below="@+id/login"
+        android:layout_below="@+id/transferFunds"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/transferFunds"
+        android:layout_alignEnd="@+id/transferFunds"/>
 
 </RelativeLayout>
