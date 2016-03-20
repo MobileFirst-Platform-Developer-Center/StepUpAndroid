@@ -27,7 +27,7 @@ limitations under the License.
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/HelloTextView"
+        android:id="@+id/helloTextView"
         android:textSize="18dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -35,34 +35,27 @@ limitations under the License.
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <LinearLayout
-        android:id="@+id/buttonsLinearLayout"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/HelloTextView"
-        android:layout_width="fill_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center">
+        android:text="Get Balance"
+        android:id="@+id/getBalance"
+        android:layout_below="@+id/helloTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/helloTextView"
+        android:layout_alignEnd="@+id/helloTextView" />
 
-        <Button
-            android:id="@+id/getBalance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_below="@id/HelloTextView"
-            android:layout_gravity="center_horizontal"
-            android:text="Get Balance"/>
-
-        <Button
-            android:id="@+id/transferFunds"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_below="@id/HelloTextView"
-            android:layout_gravity="center_horizontal"
-            android:text="Transfer Funds" />
-
-    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transfer Funds"
+        android:id="@+id/transferFunds"
+        android:layout_below="@+id/getBalance"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/getBalance"
+        android:layout_alignEnd="@+id/getBalance" />
 
     <TextView
         android:layout_width="wrap_content"
