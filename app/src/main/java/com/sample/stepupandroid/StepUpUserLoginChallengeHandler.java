@@ -28,7 +28,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     private String errorMsg = "";
     private Context context;
     private boolean isChallenged = false;
-
     private LocalBroadcastManager broadcastManager;
 
     //********************************

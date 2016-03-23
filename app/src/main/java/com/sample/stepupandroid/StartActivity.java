@@ -32,6 +32,7 @@ public class StartActivity extends AppCompatActivity {
 
         //Initialize the challenge handler
         StepUpUserLoginChallengeHandler.createAndRegister();
+        StepUpPinCodeChallengeHandler.createAndRegister();
 
         //Handle auto-login success
         loginSuccessReceiver = new BroadcastReceiver() {

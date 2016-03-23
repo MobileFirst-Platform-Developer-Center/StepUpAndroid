@@ -26,6 +26,11 @@ public class Constants {
     static final String ACTION_LOGOUT_SUCCESS = "com.sample.stepupandroid.broadcast.logout.success";
     static final String ACTION_LOGOUT_FAILURE = "com.sample.stepupandroid.broadcast.logout.failure";
 
+    static final String ACTION_PINCODE_REQUIRED = "com.sample.stepupandroid.broadcast.pincode.required";
+    static final String ACTION_PINCODE_SUCCESS = "com.sample.stepupandroid.broadcast.pincode.success";
+    static final String ACTION_PINCODE_FAILURE = "com.sample.stepupandroid.broadcast.pincode.failure";
+    static final String ACTION_PINCODE_SUBMIT_ANSWER = "com.sample.stepupandroid.broadcast.pincode.submit.answer";
+
     static final String PREFERENCES_FILE = "com.sample.stepupandroid.preferences";
     static final String PREFERENCES_KEY_USER = "com.sample.stepupandroid.preferences.user";
 }

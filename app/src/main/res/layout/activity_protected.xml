@@ -40,6 +40,7 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:text="Get Balance"
         android:id="@+id/getBalance"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/helloTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -63,10 +64,10 @@ limitations under the License.
         android:id="@+id/errorMsg"
         android:layout_marginTop="10dp"
         android:textSize="18dp"
-        android:layout_below="@+id/buttonsLinearLayout"
+        android:layout_below="@+id/transferFunds"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/buttonsLinearLayout"
-        android:layout_alignEnd="@+id/buttonsLinearLayout"/>
+        android:layout_alignRight="@+id/transferFunds"
+        android:layout_alignEnd="@+id/transferFunds"/>
 
 </RelativeLayout>
