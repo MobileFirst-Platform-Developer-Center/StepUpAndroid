@@ -36,7 +36,7 @@ public class ProtectedActivity extends AppCompatActivity {
     private TextView helloTextView, errorMsgTextView;
     private Button getBalanceButton, transferFundsButton, logoutButton;
     private URI adapterPath = null;
-    private BroadcastReceiver pincodeRequiredReceiver, pincodeFailureReceiver;
+    private BroadcastReceiver pincodeRequiredReceiver, pincodeFailureReceiver, loginRequiredReceiver;
     private Context context;
     private LocalBroadcastManager broadcastManager;
 
@@ -49,6 +49,7 @@ public class ProtectedActivity extends AppCompatActivity {
         broadcastManager = LocalBroadcastManager.getInstance(context);
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeFailureReceiver, new IntentFilter(Constants.ACTION_PINCODE_FAILURE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
     }
 
     @Override
@@ -207,6 +208,19 @@ public class ProtectedActivity extends AppCompatActivity {
             }
         };
 
+        //*****************************************
+        // loginRequired Receiver
+        //*****************************************
+        loginRequiredReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, final Intent intent) {
+                Log.d(DEBUG_NAME, "loginRequiredReceiver");
+                //Open login screen
+                Intent openLoginScreen = new Intent(_this, LoginActivity.class);
+                _this.startActivity(openLoginScreen);
+            }
+        };
+
 
         //*****************************************
         // logoutButton - OnClickListener
@@ -235,6 +249,13 @@ public class ProtectedActivity extends AppCompatActivity {
     protected void onStop() {
         Log.d(DEBUG_NAME,"onStop");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeRequiredReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeFailureReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(DEBUG_NAME,"onBackPressed");
     }
 }

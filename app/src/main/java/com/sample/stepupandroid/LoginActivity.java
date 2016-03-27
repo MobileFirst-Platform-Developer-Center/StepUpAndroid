@@ -147,4 +147,9 @@ public class LoginActivity extends AppCompatActivity {
         _this.runOnUiThread(run);
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.d(DEBUG_NAME,"onBackPressed");
+    }
+
 }
