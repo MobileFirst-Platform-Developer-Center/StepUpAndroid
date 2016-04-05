@@ -22,10 +22,6 @@ public class Constants {
     static final String ACTION_LOGIN_FAILURE = "com.sample.stepupandroid.broadcast.login.failure";
     static final String ACTION_LOGIN_REQUIRED = "com.sample.stepupandroid.broadcast.login.required";
 
-    static final String ACTION_LOGOUT = "com.sample.stepupandroid.broadcast.logout";
-    static final String ACTION_LOGOUT_SUCCESS = "com.sample.stepupandroid.broadcast.logout.success";
-    static final String ACTION_LOGOUT_FAILURE = "com.sample.stepupandroid.broadcast.logout.failure";
-
     static final String ACTION_PINCODE_REQUIRED = "com.sample.stepupandroid.broadcast.pincode.required";
     static final String ACTION_PINCODE_SUCCESS = "com.sample.stepupandroid.broadcast.pincode.success";
     static final String ACTION_PINCODE_FAILURE = "com.sample.stepupandroid.broadcast.pincode.failure";

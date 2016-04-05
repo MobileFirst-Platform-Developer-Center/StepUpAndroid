@@ -19,7 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.worklight.wlclient.api.WLAuthorizationManager;
 import com.worklight.wlclient.api.WLFailResponse;
+import com.worklight.wlclient.api.WLLogoutResponseListener;
 import com.worklight.wlclient.api.WLResourceRequest;
 import com.worklight.wlclient.api.WLResponse;
 import com.worklight.wlclient.api.WLResponseListener;
@@ -229,6 +231,32 @@ public class ProtectedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(DEBUG_NAME, "logoutButton clicked");
+
+                WLAuthorizationManager.getInstance().logout("StepUpUserLogin", new WLLogoutResponseListener() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d(DEBUG_NAME, "StepUpUserLogin->Logout Success");
+                        WLAuthorizationManager.getInstance().logout("StepUpPinCode", new WLLogoutResponseListener() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d(DEBUG_NAME, "StepUpPinCode->Logout Success");
+                                // Go to start screen
+                                Intent openStartScreen = new Intent(_this, StartActivity.class);
+                                _this.startActivity(openStartScreen);
+                            }
+
+                            @Override
+                            public void onFailure(WLFailResponse wlFailResponse) {
+                                Log.d(DEBUG_NAME, "StepUpPinCode->Logout Failure");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(WLFailResponse wlFailResponse) {
+                        Log.d(DEBUG_NAME, "StepUpUserLogin->Logout Failure");
+                    }
+                });
             }
         });
     }

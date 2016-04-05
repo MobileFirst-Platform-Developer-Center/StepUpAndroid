@@ -13,7 +13,6 @@ import com.worklight.wlclient.api.WLAuthorizationManager;
 import com.worklight.wlclient.api.WLClient;
 import com.worklight.wlclient.api.WLFailResponse;
 import com.worklight.wlclient.api.WLLoginResponseListener;
-import com.worklight.wlclient.api.WLLogoutResponseListener;
 import com.worklight.wlclient.api.challengehandler.WLChallengeHandler;
 import com.worklight.wlclient.auth.AccessToken;
 
@@ -56,14 +55,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
                 }
             }
         },new IntentFilter(Constants.ACTION_LOGIN));
-
-        //Receive logout requests
-        broadcastManager.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                logout();
-            }
-        }, new IntentFilter(Constants.ACTION_LOGOUT));
 
         //Receive auto-login requests
         broadcastManager.registerReceiver(new BroadcastReceiver() {
@@ -118,30 +109,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
             @Override
             public void onFailure(WLFailResponse wlFailResponse) {
                 Log.d(securityCheckName, "auto-login failure");
-            }
-        });
-    }
-
-    //********************************
-    // logout
-    //********************************
-    public void logout(){
-        WLAuthorizationManager.getInstance().logout(securityCheckName, new WLLogoutResponseListener() {
-            @Override
-            public void onSuccess() {
-                Log.d(securityCheckName, "Logout Success");
-                Intent intent = new Intent();
-                intent.setAction(Constants.ACTION_LOGOUT_SUCCESS);
-                broadcastManager.sendBroadcast(intent);
-            }
-
-            @Override
-            public void onFailure(WLFailResponse wlFailResponse) {
-                Log.d(securityCheckName, "Logout Failure");
-                Intent intent = new Intent();
-                intent.setAction(Constants.ACTION_LOGOUT_FAILURE);
-                broadcastManager.sendBroadcast(intent);
-
             }
         });
     }
