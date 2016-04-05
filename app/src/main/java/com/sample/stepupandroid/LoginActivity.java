@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -31,15 +32,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginActivity _this;
     private final String DEBUG_NAME = "LoginActivity";
-    private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver;
+    private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver, pincodeRequiredReceiver;
+    private Context context;
+    private LocalBroadcastManager broadcastManager;
 
     @Override
     protected void onStart() {
         Log.d(DEBUG_NAME, "onStart");
         super.onStart();
+        broadcastManager = LocalBroadcastManager.getInstance(context);
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginErrorReceiver, new IntentFilter(Constants.ACTION_LOGIN_FAILURE));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
+        LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
     }
 
     @Override
@@ -113,6 +118,42 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(DEBUG_NAME, "loginErrorReceiver");
                 errorMsgDisplay.setText("");
                 alertError(intent.getStringExtra("errorMsg"));
+            }
+        };
+
+        //*****************************************
+        // pincodeRequired BroadcastReceiver
+        //*****************************************
+        pincodeRequiredReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(DEBUG_NAME, "pincodeRequiredReceiver");
+                // Create an AlertDialog to enter PinCode
+                AlertDialog.Builder builder = new AlertDialog.Builder(_this);
+                builder.setTitle("Enter pincode:");
+                // Add input text field to the AlertDialog
+                final EditText input = new EditText(_this);
+                input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                builder.setView(input);
+                // Set up the buttons to the AlertDialog
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Send broadcast to PinCode-challenge-handler with entered pincode
+                        Intent intent = new Intent();
+                        intent.setAction(Constants.ACTION_PINCODE_SUBMIT_ANSWER);
+                        intent.putExtra("credentials", input.getText().toString());
+                        broadcastManager.sendBroadcast(intent);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                // Display the AlertDialog
+                builder.show();
             }
         };
     }

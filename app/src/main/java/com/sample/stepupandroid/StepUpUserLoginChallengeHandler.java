@@ -118,7 +118,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     //********************************
     @Override
     public void handleChallenge(JSONObject jsonObject) {
-        Log.d(securityCheckName, "Challenge Received");
+        Log.d(securityCheckName, "Challenge Received:\n"+ jsonObject.toString());
         isChallenged = true;
         try {
             if(jsonObject.isNull("errorMsg")){
