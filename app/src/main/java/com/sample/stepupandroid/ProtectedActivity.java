@@ -147,7 +147,9 @@ public class ProtectedActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(WLFailResponse wlFailResponse) {
                                 Log.d(DEBUG_NAME, "Transfer Failure: " + wlFailResponse.getErrorMsg());
-                                updateTextView("Transfer Failure");
+                                // Go to start screen
+                                Intent openStartScreen = new Intent(_this, StartActivity.class);
+                                _this.startActivity(openStartScreen);
                             }
                         });
                     }
