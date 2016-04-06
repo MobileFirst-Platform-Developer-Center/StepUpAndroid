@@ -37,6 +37,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
         context = WLClient.getInstance().getContext();
         broadcastManager = LocalBroadcastManager.getInstance(context);
 
+
         //Reset the current user
         SharedPreferences preferences = context.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -104,6 +105,10 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
             @Override
             public void onSuccess(AccessToken accessToken) {
                 Log.d(securityCheckName, "auto-login success");
+                Intent intent = new Intent();
+                intent.setAction(Constants.ACTION_LOGIN_AUTO_SUCCESS);
+                broadcastManager.sendBroadcast(intent);
+                Log.d(securityCheckName, "handleSuccess");
             }
 
             @Override
