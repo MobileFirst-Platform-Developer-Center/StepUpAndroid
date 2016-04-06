@@ -106,8 +106,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 Log.d(DEBUG_NAME, "loginSuccessReceiver");
                 //Go to the protected area
-                Intent openProtectedActivity = new Intent(_this, ProtectedActivity.class);
-                _this.startActivity(openProtectedActivity);
+                //Intent openProtectedActivity = new Intent(_this, ProtectedActivity.class);
+                //_this.startActivity(openProtectedActivity);
+                finish();
             }
         };
 
@@ -128,32 +129,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(DEBUG_NAME, "pincodeRequiredReceiver");
-                // Create an AlertDialog to enter PinCode
-                AlertDialog.Builder builder = new AlertDialog.Builder(_this);
-                builder.setTitle("Enter pincode:");
-                // Add input text field to the AlertDialog
-                final EditText input = new EditText(_this);
-                input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                builder.setView(input);
-                // Set up the buttons to the AlertDialog
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Send broadcast to PinCode-challenge-handler with entered pincode
-                        Intent intent = new Intent();
-                        intent.setAction(Constants.ACTION_PINCODE_SUBMIT_ANSWER);
-                        intent.putExtra("credentials", input.getText().toString());
-                        broadcastManager.sendBroadcast(intent);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                // Display the AlertDialog
-                builder.show();
+                //StepUpPinCodeChallengeHandler.isPinCodeChallengeAcceptedInLoginActivity = 1;
+                finish();
             }
         };
     }
