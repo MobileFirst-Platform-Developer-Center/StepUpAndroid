@@ -6,18 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,20 +27,24 @@ public class LoginActivity extends AppCompatActivity {
     private LoginActivity _this;
     private final String DEBUG_NAME = "LoginActivity";
     private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver, pincodeRequiredReceiver;
-    private Context context;
     private LocalBroadcastManager broadcastManager;
 
+    //********************************
+    // onStart
+    //********************************
     @Override
     protected void onStart() {
         Log.d(DEBUG_NAME, "onStart");
         super.onStart();
-        broadcastManager = LocalBroadcastManager.getInstance(context);
+        broadcastManager = LocalBroadcastManager.getInstance(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginErrorReceiver, new IntentFilter(Constants.ACTION_LOGIN_FAILURE));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
-        LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
     }
 
+    //********************************
+    // onCreate
+    //********************************
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +83,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //Login required
+        //********************************
+        // loginRequiredReceiver
+        //********************************
         loginRequiredReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, final Intent intent) {
@@ -100,19 +100,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        //Login success
+        //********************************
+        // loginSuccessReceiver
+        //********************************
         loginSuccessReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(DEBUG_NAME, "loginSuccessReceiver");
-                //Go to the protected area
-                //Intent openProtectedActivity = new Intent(_this, ProtectedActivity.class);
-                //_this.startActivity(openProtectedActivity);
                 finish();
             }
         };
 
-        //Login error receiver
+        //********************************
+        // loginErrorReceiver
+        //********************************
         loginErrorReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -121,29 +122,23 @@ public class LoginActivity extends AppCompatActivity {
                 alertError(intent.getStringExtra("errorMsg"));
             }
         };
-
-        //*****************************************
-        // pincodeRequired BroadcastReceiver
-        //*****************************************
-        pincodeRequiredReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(DEBUG_NAME, "pincodeRequiredReceiver");
-                //StepUpPinCodeChallengeHandler.isPinCodeChallengeAcceptedInLoginActivity = 1;
-                finish();
-            }
-        };
     }
 
+    //********************************
+    // onPause
+    //********************************
     @Override
-    protected void onStop() {
-        Log.d(DEBUG_NAME,"onStop");
+    protected void onPause() {
+        Log.d(DEBUG_NAME,"onPause");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginErrorReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
-        super.onStop();
+        super.onPause();
     }
 
+    //********************************
+    // alertError
+    //********************************
     public void alertError(final String msg) {
         Log.d(DEBUG_NAME, "alertError");
         Runnable run = new Runnable() {
@@ -163,6 +158,9 @@ public class LoginActivity extends AppCompatActivity {
         _this.runOnUiThread(run);
     }
 
+    //********************************
+    // onBackPressed
+    //********************************
     @Override
     public void onBackPressed() {
         Log.d(DEBUG_NAME,"onBackPressed");

@@ -26,14 +26,14 @@ public class StartActivity extends AppCompatActivity {
 
         _this = this;
 
-        //Initialize the MobileFirst SDK. This needs to happen just once.
+        // Initialize the MobileFirst SDK. This needs to happen just once.
         WLClient.createInstance(this);
 
-        //Initialize the challenge handler
+        // Initialize the challenge handler
         StepUpUserLoginChallengeHandler.createAndRegister();
         StepUpPinCodeChallengeHandler.createAndRegister();
 
-        //Handle auto-login success
+        // Handle auto-login success
         loginSuccessReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -44,7 +44,7 @@ public class StartActivity extends AppCompatActivity {
             }
         };
 
-        //Handle auto-login failure
+        // Handle auto-login failure
         loginRequiredReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -55,7 +55,7 @@ public class StartActivity extends AppCompatActivity {
             }
         };
 
-        //Try to auto-login
+        // Try to auto-login
         Intent intent = new Intent();
         intent.setAction(Constants.ACTION_LOGIN_AUTO);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -75,13 +75,27 @@ public class StartActivity extends AppCompatActivity {
     }
 
     //********************************
-    // onStop
+    // onNewIntent
     //********************************
     @Override
-    protected void onStop() {
-        Log.d(DEBUG_NAME, "onStop");
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(DEBUG_NAME, "onNewIntent");
+
+        //Try to auto-login
+        Intent autoLogin = new Intent();
+        autoLogin.setAction(Constants.ACTION_LOGIN_AUTO);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(autoLogin);
+    }
+
+    //********************************
+    // onPause
+    //********************************
+    @Override
+    protected void onPause() {
+        Log.d(DEBUG_NAME, "onPause");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
-        super.onStop();
+        super.onPause();
     }
 }

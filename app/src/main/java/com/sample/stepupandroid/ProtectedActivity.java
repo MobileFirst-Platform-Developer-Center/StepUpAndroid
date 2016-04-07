@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -19,12 +18,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.worklight.wlclient.api.WLAccessTokenListener;
 import com.worklight.wlclient.api.WLAuthorizationManager;
 import com.worklight.wlclient.api.WLFailResponse;
 import com.worklight.wlclient.api.WLLogoutResponseListener;
 import com.worklight.wlclient.api.WLResourceRequest;
 import com.worklight.wlclient.api.WLResponse;
 import com.worklight.wlclient.api.WLResponseListener;
+import com.worklight.wlclient.auth.AccessToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +40,6 @@ public class ProtectedActivity extends AppCompatActivity {
     private Button getBalanceButton, transferFundsButton, logoutButton;
     private URI adapterPath = null;
     private BroadcastReceiver pincodeRequiredReceiver, pincodeFailureReceiver, loginRequiredReceiver;
-    private Context context;
     private LocalBroadcastManager broadcastManager;
 
     private final String DEBUG_NAME = "ProtectedActivity";
@@ -48,7 +48,7 @@ public class ProtectedActivity extends AppCompatActivity {
     protected void onStart() {
         Log.d(DEBUG_NAME, "onStart");
         super.onStart();
-        broadcastManager = LocalBroadcastManager.getInstance(context);
+        broadcastManager = LocalBroadcastManager.getInstance(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeFailureReceiver, new IntentFilter(Constants.ACTION_PINCODE_FAILURE));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
@@ -116,7 +116,24 @@ public class ProtectedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(DEBUG_NAME, "transferFundsButton clicked");
-                _this.displayAmountDialog();
+
+                // obtainAccessToken to check if user is authenticated before transfering
+                WLAuthorizationManager.getInstance().obtainAccessToken("StepUpUserLogin", new WLAccessTokenListener() {
+                    @Override
+                    public void onSuccess(AccessToken accessToken) {
+                        Log.d(DEBUG_NAME, "obtainAccessToken Success");
+                        // Run on UI thread
+                        _this.displayAmountDialog();
+                    }
+
+                    @Override
+                    public void onFailure(WLFailResponse wlFailResponse) {
+                        Log.d(DEBUG_NAME, "obtainAccessToken failure");
+
+                    }
+                });
+
+                //_this.displayAmountDialog();
             }
         });
 
@@ -287,13 +304,16 @@ public class ProtectedActivity extends AppCompatActivity {
         this.runOnUiThread(run);
     }
 
+    //*****************************************
+    // onPause
+    //*****************************************
     @Override
-    protected void onStop() {
-        Log.d(DEBUG_NAME,"onStop");
+    protected void onPause() {
+        Log.d(DEBUG_NAME,"onPause");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeFailureReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
-        super.onStop();
+        super.onPause();
     }
 
     @Override
