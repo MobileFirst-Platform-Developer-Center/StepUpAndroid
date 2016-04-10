@@ -65,8 +65,10 @@ public class StepUpPinCodeChallengeHandler extends WLChallengeHandler {
     @Override
     public void handleChallenge(JSONObject jsonObject) {
         Log.d(securityCheckName, "handleChallenge");
+        String hint = null;
         Intent intent = new Intent();
         intent.setAction(Constants.ACTION_PINCODE_REQUIRED);
+        intent.putExtra("errorMsg", jsonObject.toString());
         broadcastManager.sendBroadcast(intent);
 
     }

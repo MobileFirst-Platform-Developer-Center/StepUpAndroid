@@ -34,6 +34,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     //********************************
     public StepUpUserLoginChallengeHandler() {
         super(securityCheckName);
+        Log.d(securityCheckName, "constructor");
         context = WLClient.getInstance().getContext();
         broadcastManager = LocalBroadcastManager.getInstance(context);
 
@@ -70,6 +71,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     // createAndRegister
     //********************************
     public static StepUpUserLoginChallengeHandler createAndRegister(){
+        Log.d(securityCheckName, "createAndRegister");
         StepUpUserLoginChallengeHandler challengeHandler = new StepUpUserLoginChallengeHandler();
         WLClient.getInstance().registerChallengeHandler(challengeHandler);
         return challengeHandler;
@@ -79,6 +81,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     // login
     //********************************
     public void login(JSONObject credentials){
+        Log.d(securityCheckName, "login");
         if(isChallenged){
             submitChallengeAnswer(credentials);
         }
@@ -101,6 +104,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     // autoLogin
     //********************************
     public void autoLogin(){
+        Log.d(securityCheckName, "autoLogin");
         WLAuthorizationManager.getInstance().obtainAccessToken(securityCheckName, new WLAccessTokenListener() {
             @Override
             public void onSuccess(AccessToken accessToken) {
@@ -148,6 +152,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     @Override
     public void handleSuccess(JSONObject identity) {
         super.handleSuccess(identity);
+        Log.d(securityCheckName, "handleSuccess");
         isChallenged = false;
         try {
             //Save the current user
@@ -162,7 +167,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
         Intent intent = new Intent();
         intent.setAction(Constants.ACTION_LOGIN_SUCCESS);
         broadcastManager.sendBroadcast(intent);
-        Log.d(securityCheckName, "handleSuccess");
     }
 
     //********************************
@@ -171,6 +175,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     @Override
     public void handleFailure(JSONObject error) {
         super.handleFailure(error);
+        Log.d(securityCheckName, "handleFailure");
         isChallenged = false;
         if(error.isNull("failure")){
             errorMsg = "Failed to login. Please try again later.";
