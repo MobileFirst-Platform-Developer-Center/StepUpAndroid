@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-
 import com.worklight.wlclient.api.WLClient;
 import com.worklight.wlclient.api.challengehandler.WLChallengeHandler;
 
@@ -65,10 +64,19 @@ public class StepUpPinCodeChallengeHandler extends WLChallengeHandler {
     @Override
     public void handleChallenge(JSONObject jsonObject) {
         Log.d(securityCheckName, "handleChallenge");
-        String hint = null;
+        String errorMsg = null;
+
+        try{
+            if (!jsonObject.isNull("errorMsg")){
+                errorMsg = jsonObject.getString("errorMsg");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         Intent intent = new Intent();
         intent.setAction(Constants.ACTION_PINCODE_REQUIRED);
-        intent.putExtra("errorMsg", jsonObject.toString());
+        intent.putExtra("errorMsg", errorMsg);
         broadcastManager.sendBroadcast(intent);
 
     }

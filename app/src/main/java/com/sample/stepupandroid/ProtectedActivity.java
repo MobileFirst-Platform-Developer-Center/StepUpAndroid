@@ -45,7 +45,6 @@ public class ProtectedActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        Log.d(DEBUG_NAME, "onStart");
         super.onStart();
         broadcastManager = LocalBroadcastManager.getInstance(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
@@ -56,24 +55,22 @@ public class ProtectedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(DEBUG_NAME, "onCreate");
-
         _this = this;
         setContentView(R.layout.activity_protected);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar_with_logout_button);
 
         //Initialize the UI elements
-        helloTextView = (TextView)findViewById(R.id.helloTextView);
-        getBalanceButton = (Button)findViewById(R.id.getBalance);
-        transferFundsButton = (Button)findViewById(R.id.transferFunds);
-        logoutButton = (Button)findViewById(R.id.logout);
-        errorMsgTextView = (TextView)findViewById(R.id.errorMsg);
+        helloTextView = (TextView) findViewById(R.id.helloTextView);
+        getBalanceButton = (Button) findViewById(R.id.getBalance);
+        transferFundsButton = (Button) findViewById(R.id.transferFunds);
+        logoutButton = (Button) findViewById(R.id.logout);
+        errorMsgTextView = (TextView) findViewById(R.id.errorMsg);
 
         //Show the display name
         try {
             SharedPreferences preferences = _this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
-            JSONObject user = new JSONObject(preferences.getString(Constants.PREFERENCES_KEY_USER,null));
+            JSONObject user = new JSONObject(preferences.getString(Constants.PREFERENCES_KEY_USER, null));
             helloTextView.setText("Hello " + user.getString("displayName"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -95,13 +92,11 @@ public class ProtectedActivity extends AppCompatActivity {
                 request.send(new WLResponseListener() {
                     @Override
                     public void onSuccess(WLResponse wlResponse) {
-                        Log.d("Balance: ", wlResponse.getResponseText());
                         updateTextView("Balance: " + wlResponse.getResponseText());
                     }
 
                     @Override
                     public void onFailure(WLFailResponse wlFailResponse) {
-                        Log.d("Failed to get balance: ", wlFailResponse.getErrorMsg());
                         updateTextView("Failed to get balance: " + wlFailResponse.getErrorMsg());
                     }
                 });
@@ -120,17 +115,14 @@ public class ProtectedActivity extends AppCompatActivity {
                 WLAuthorizationManager.getInstance().obtainAccessToken("StepUpUserLogin", new WLAccessTokenListener() {
                     @Override
                     public void onSuccess(AccessToken accessToken) {
-                        Log.d(DEBUG_NAME, "obtainAccessToken Success");
                         _this.displayAmountDialog();
                     }
 
                     @Override
                     public void onFailure(WLFailResponse wlFailResponse) {
-                        Log.d(DEBUG_NAME, "obtainAccessToken failure: " + wlFailResponse.toString());
+                        Log.d(DEBUG_NAME, "obtainAccessToken failure: " + wlFailResponse.getErrorMsg());
                     }
                 });
-
-                //_this.displayAmountDialog();
             }
         });
 
@@ -210,7 +202,7 @@ public class ProtectedActivity extends AppCompatActivity {
     //*****************************************
     // displayAmountDialog
     //*****************************************
-    public void displayAmountDialog(){
+    public void displayAmountDialog() {
         Runnable run = new Runnable() {
             public void run() {
                 // Create an AlertDialog to enter transfer amount
@@ -271,7 +263,7 @@ public class ProtectedActivity extends AppCompatActivity {
                 // Create an AlertDialog to enter PinCode
                 AlertDialog.Builder builder = new AlertDialog.Builder(_this);
                 builder.setTitle("Enter pincode:");
-                builder.setMessage(errorMsg.toString());
+                builder.setMessage(errorMsg);
                 // Add input text field to the AlertDialog
                 final EditText input = new EditText(_this);
                 input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -303,7 +295,7 @@ public class ProtectedActivity extends AppCompatActivity {
     //*****************************************
     // updateTextView
     //*****************************************
-    public void updateTextView(final String str){
+    public void updateTextView(final String str) {
         Runnable run = new Runnable() {
             public void run() {
                 errorMsgTextView.setText(str);
@@ -317,7 +309,6 @@ public class ProtectedActivity extends AppCompatActivity {
     //*****************************************
     @Override
     protected void onPause() {
-        Log.d(DEBUG_NAME,"onPause");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeFailureReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
@@ -326,6 +317,6 @@ public class ProtectedActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(DEBUG_NAME,"onBackPressed");
+        Log.d(DEBUG_NAME, "onBackPressed");
     }
 }

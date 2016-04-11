@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginActivity _this;
     private final String DEBUG_NAME = "LoginActivity";
-    private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver, pincodeRequiredReceiver;
+    private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver;
     private LocalBroadcastManager broadcastManager;
 
     //********************************
@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     //********************************
     @Override
     protected void onStart() {
-        Log.d(DEBUG_NAME, "onStart");
         super.onStart();
         broadcastManager = LocalBroadcastManager.getInstance(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
@@ -48,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(DEBUG_NAME, "onCreate");
         setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
@@ -129,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
     //********************************
     @Override
     protected void onPause() {
-        Log.d(DEBUG_NAME,"onPause");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginErrorReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
@@ -140,7 +137,6 @@ public class LoginActivity extends AppCompatActivity {
     // alertError
     //********************************
     public void alertError(final String msg) {
-        Log.d(DEBUG_NAME, "alertError");
         Runnable run = new Runnable() {
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(_this);

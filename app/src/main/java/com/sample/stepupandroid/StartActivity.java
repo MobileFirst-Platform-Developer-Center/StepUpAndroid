@@ -22,8 +22,6 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(DEBUG_NAME, "onCreate");
-
         _this = this;
 
         // Initialize the MobileFirst SDK. This needs to happen just once.
@@ -67,8 +65,6 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(DEBUG_NAME, "onStart");
-
         LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_AUTO_SUCCESS));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_FAILURE));
@@ -80,8 +76,6 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d(DEBUG_NAME, "onNewIntent");
-
         //Try to auto-login
         Intent autoLogin = new Intent();
         autoLogin.setAction(Constants.ACTION_LOGIN_AUTO);
@@ -93,7 +87,6 @@ public class StartActivity extends AppCompatActivity {
     //********************************
     @Override
     protected void onPause() {
-        Log.d(DEBUG_NAME, "onPause");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         super.onPause();
