@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:text="Logout"
         android:id="@+id/logout"
-        android:gravity="right" />
+        android:gravity="center_vertical|center"/>
 
 </LinearLayout>
