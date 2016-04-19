@@ -17,9 +17,7 @@ package com.sample.stepupandroid;
 
 public class Constants {
     static final String ACTION_LOGIN = "com.sample.stepupandroid.broadcast.login";
-    static final String ACTION_LOGIN_AUTO = "com.sample.stepupandroid.broadcast.login.auto";
     static final String ACTION_LOGIN_SUCCESS = "com.sample.stepupandroid.broadcast.login.success";
-    static final String ACTION_LOGIN_AUTO_SUCCESS = "com.sample.stepupandroid.broadcast.login.auto.success";
     static final String ACTION_LOGIN_FAILURE = "com.sample.stepupandroid.broadcast.login.failure";
     static final String ACTION_LOGIN_REQUIRED = "com.sample.stepupandroid.broadcast.login.required";
 

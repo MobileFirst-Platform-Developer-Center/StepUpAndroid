@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.worklight.wlclient.api.WLClient;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private LoginActivity _this;
     private final String DEBUG_NAME = "LoginActivity";
     private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver;
-    private LocalBroadcastManager broadcastManager;
 
     //********************************
     // onStart
@@ -35,7 +36,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        broadcastManager = LocalBroadcastManager.getInstance(this);
+        Log.d(DEBUG_NAME, "onStart");
+
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginErrorReceiver, new IntentFilter(Constants.ACTION_LOGIN_FAILURE));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
@@ -47,11 +49,20 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(DEBUG_NAME, "onCreate");
+
+        _this = this;
+
+        // Initialize the MobileFirst SDK. This needs to happen just once.
+        WLClient.createInstance(this);
+
+        // Initialize the challenge handler
+        StepUpUserLoginChallengeHandler.createAndRegister();
+        StepUpPinCodeChallengeHandler.createAndRegister();
+
         setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
-
-        _this = this;
 
         //Initialize the UI elements
         usernameInput = (EditText)findViewById(R.id.usernameInput);
@@ -105,7 +116,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(DEBUG_NAME, "loginSuccessReceiver");
-                finish();
+
+                if(isTaskRoot()){
+                    //First time, go to protected area
+                    Intent openProtectedScreen = new Intent(_this, ProtectedActivity.class);
+                    _this.startActivity(openProtectedScreen);
+                } else{
+                    //Other times, go "back" to wherever you came from
+                    finish();
+                }
             }
         };
 
@@ -127,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
     //********************************
     @Override
     protected void onPause() {
+        Log.d(DEBUG_NAME, "onPause");
+
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginErrorReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);

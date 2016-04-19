@@ -43,19 +43,12 @@ public class ProtectedActivity extends AppCompatActivity {
     private BroadcastReceiver pincodeRequiredReceiver, pincodeFailureReceiver, loginRequiredReceiver;
     private LocalBroadcastManager broadcastManager;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        broadcastManager = LocalBroadcastManager.getInstance(this);
-        LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
-        LocalBroadcastManager.getInstance(this).registerReceiver(pincodeFailureReceiver, new IntentFilter(Constants.ACTION_PINCODE_FAILURE));
-        LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         _this = this;
+
         setContentView(R.layout.activity_protected);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar_with_logout_button);
@@ -68,12 +61,14 @@ public class ProtectedActivity extends AppCompatActivity {
         errorMsgTextView = (TextView) findViewById(R.id.errorMsg);
 
         //Show the display name
-        try {
-            SharedPreferences preferences = _this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
-            JSONObject user = new JSONObject(preferences.getString(Constants.PREFERENCES_KEY_USER, null));
-            helloTextView.setText("Hello " + user.getString("displayName"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+        SharedPreferences preferences = _this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        if(preferences.getString(Constants.PREFERENCES_KEY_USER,null) != null){
+            try {
+                JSONObject user = new JSONObject(preferences.getString(Constants.PREFERENCES_KEY_USER,null));
+                helloTextView.setText("Hello " + user.getString("displayName"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         //*****************************************
@@ -161,7 +156,6 @@ public class ProtectedActivity extends AppCompatActivity {
             }
         };
 
-
         //*****************************************
         // logoutButton - OnClickListener
         //*****************************************
@@ -178,9 +172,10 @@ public class ProtectedActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess() {
                                 Log.d(DEBUG_NAME, "StepUpPinCode->Logout Success");
-                                // Go to start screen
-                                Intent openStartScreen = new Intent(_this, StartActivity.class);
-                                _this.startActivity(openStartScreen);
+                                updateTextView("");
+                                //Open login screen
+                                Intent openLoginScreen = new Intent(_this, LoginActivity.class);
+                                _this.startActivity(openLoginScreen);
                             }
 
                             @Override
@@ -197,6 +192,29 @@ public class ProtectedActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    //*****************************************
+    // onStart
+    //*****************************************
+    @Override
+    protected void onStart() {
+        super.onStart();
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
+        LocalBroadcastManager.getInstance(this).registerReceiver(pincodeFailureReceiver, new IntentFilter(Constants.ACTION_PINCODE_FAILURE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
+    }
+
+    //*****************************************
+    // onPause
+    //*****************************************
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeRequiredReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeFailureReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
+        super.onPause();
     }
 
     //*****************************************
@@ -296,23 +314,14 @@ public class ProtectedActivity extends AppCompatActivity {
     // updateTextView
     //*****************************************
     public void updateTextView(final String str) {
+        Log.d(DEBUG_NAME, "updateTextView");
+
         Runnable run = new Runnable() {
             public void run() {
                 errorMsgTextView.setText(str);
             }
         };
         this.runOnUiThread(run);
-    }
-
-    //*****************************************
-    // onPause
-    //*****************************************
-    @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeRequiredReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeFailureReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
-        super.onPause();
     }
 
     @Override

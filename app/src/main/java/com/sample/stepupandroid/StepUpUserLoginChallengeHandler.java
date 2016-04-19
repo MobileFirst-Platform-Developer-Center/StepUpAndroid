@@ -19,9 +19,7 @@ import com.worklight.wlclient.auth.AccessToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by shmulikb on 14/03/16.
- */
+
 public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     private static String securityCheckName = "StepUpUserLogin";
     private String errorMsg = "";
@@ -37,7 +35,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
         Log.d(securityCheckName, "constructor");
         context = WLClient.getInstance().getContext();
         broadcastManager = LocalBroadcastManager.getInstance(context);
-
 
         //Reset the current user
         SharedPreferences preferences = context.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
@@ -57,14 +54,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
                 }
             }
         },new IntentFilter(Constants.ACTION_LOGIN));
-
-        //Receive auto-login requests
-        broadcastManager.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                autoLogin();
-            }
-        },new IntentFilter(Constants.ACTION_LOGIN_AUTO));
     }
 
     //********************************
@@ -98,28 +87,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
                 }
             });
         }
-    }
-
-    //********************************
-    // autoLogin
-    //********************************
-    public void autoLogin(){
-        Log.d(securityCheckName, "autoLogin");
-        WLAuthorizationManager.getInstance().obtainAccessToken(securityCheckName, new WLAccessTokenListener() {
-            @Override
-            public void onSuccess(AccessToken accessToken) {
-                Log.d(securityCheckName, "auto-login success");
-                Intent intent = new Intent();
-                intent.setAction(Constants.ACTION_LOGIN_AUTO_SUCCESS);
-                broadcastManager.sendBroadcast(intent);
-                Log.d(securityCheckName, "handleSuccess");
-            }
-
-            @Override
-            public void onFailure(WLFailResponse wlFailResponse) {
-                Log.d(securityCheckName, "auto-login failure");
-            }
-        });
     }
 
     //********************************

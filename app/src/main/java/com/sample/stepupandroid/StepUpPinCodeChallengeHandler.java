@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 public class StepUpPinCodeChallengeHandler extends WLChallengeHandler {
     private static String securityCheckName = "StepUpPinCode";
-    private String errorMsg = "";
     private Context context;
     private LocalBroadcastManager broadcastManager;
 
