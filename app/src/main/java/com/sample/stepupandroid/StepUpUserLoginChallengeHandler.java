@@ -32,7 +32,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     //********************************
     public StepUpUserLoginChallengeHandler() {
         super(securityCheckName);
-        Log.d(securityCheckName, "constructor");
         context = WLClient.getInstance().getContext();
         broadcastManager = LocalBroadcastManager.getInstance(context);
 
@@ -60,7 +59,6 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     // createAndRegister
     //********************************
     public static StepUpUserLoginChallengeHandler createAndRegister(){
-        Log.d(securityCheckName, "createAndRegister");
         StepUpUserLoginChallengeHandler challengeHandler = new StepUpUserLoginChallengeHandler();
         WLClient.getInstance().registerChallengeHandler(challengeHandler);
         return challengeHandler;
