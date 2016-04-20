@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginActivity _this;
     private final String DEBUG_NAME = "LoginActivity";
-    private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver;
+    private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver, pincodeRequiredReceiver;
 
     //********************************
     // onStart
@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginErrorReceiver, new IntentFilter(Constants.ACTION_LOGIN_FAILURE));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
+        LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
     }
 
     //********************************
@@ -54,7 +55,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize the challenge handler
         StepUpUserLoginChallengeHandler.createAndRegister();
+        Log.d(DEBUG_NAME, "createAndRegister-StepUpUserLoginChallengeHandler");
         StepUpPinCodeChallengeHandler.createAndRegister();
+        Log.d(DEBUG_NAME, "createAndRegister-StepUpPinCodeChallengeHandler");
 
         setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -135,6 +138,19 @@ public class LoginActivity extends AppCompatActivity {
                 alertError(intent.getStringExtra("errorMsg"));
             }
         };
+
+        //*****************************************
+        // pincodeRequired BroadcastReceiver
+        //*****************************************
+        pincodeRequiredReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(DEBUG_NAME, "pincodeRequiredReceiver");
+                Intent cancelChallengeIntent = new Intent();
+                cancelChallengeIntent.setAction(Constants.ACTION_PINCODE_CANCEL);
+                LocalBroadcastManager.getInstance(_this).sendBroadcast(cancelChallengeIntent);
+            }
+        };
     }
 
     //********************************
@@ -147,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginErrorReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeRequiredReceiver);
         super.onPause();
     }
 

@@ -34,6 +34,14 @@ public class StepUpPinCodeChallengeHandler extends WLChallengeHandler {
                 submitAnswer(credentials);
             }
         },new IntentFilter(Constants.ACTION_PINCODE_SUBMIT_ANSWER));
+
+        // Cancel
+        broadcastManager.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Cancel();
+            }
+        },new IntentFilter(Constants.ACTION_PINCODE_CANCEL));
     }
 
     //********************************
@@ -55,6 +63,14 @@ public class StepUpPinCodeChallengeHandler extends WLChallengeHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    //********************************
+    // Cancel
+    //********************************
+    public void Cancel() {
+        Log.d(securityCheckName, "Cancel");
+        submitFailure(null);
     }
 
     //********************************

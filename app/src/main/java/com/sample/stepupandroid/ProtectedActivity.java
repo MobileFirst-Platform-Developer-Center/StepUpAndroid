@@ -263,6 +263,7 @@ public class ProtectedActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        updateTextView("");
                     }
                 });
                 // Display the AlertDialog
@@ -300,6 +301,9 @@ public class ProtectedActivity extends AppCompatActivity {
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent();
+                        intent.setAction(Constants.ACTION_PINCODE_CANCEL);
+                        broadcastManager.sendBroadcast(intent);
                         dialog.cancel();
                     }
                 });
