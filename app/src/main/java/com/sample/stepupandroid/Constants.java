@@ -27,7 +27,6 @@ public class Constants {
     static final String ACTION_PINCODE_SUBMIT_ANSWER = "com.sample.stepupandroid.broadcast.pincode.submit.answer";
     static final String ACTION_PINCODE_CANCEL = "com.sample.stepupandroid.broadcast.pincode.cancel";
 
-
     static final String PREFERENCES_FILE = "com.sample.stepupandroid.preferences";
     static final String PREFERENCES_KEY_USER = "com.sample.stepupandroid.preferences.user";
 }
