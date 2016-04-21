@@ -30,12 +30,15 @@ public class LoginActivity extends AppCompatActivity {
     private final String DEBUG_NAME = "LoginActivity";
     private BroadcastReceiver loginErrorReceiver, loginRequiredReceiver, loginSuccessReceiver, pincodeRequiredReceiver;
 
+    private static Boolean isChallengeHandlersRegistered = false;
+
     //********************************
     // onStart
     //********************************
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(DEBUG_NAME, "onStart");
         LocalBroadcastManager.getInstance(this).registerReceiver(loginRequiredReceiver, new IntentFilter(Constants.ACTION_LOGIN_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginErrorReceiver, new IntentFilter(Constants.ACTION_LOGIN_FAILURE));
         LocalBroadcastManager.getInstance(this).registerReceiver(loginSuccessReceiver, new IntentFilter(Constants.ACTION_LOGIN_SUCCESS));
@@ -49,15 +52,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         _this = this;
+        Log.d(DEBUG_NAME, "onCreate");
 
-        // Initialize the MobileFirst SDK. This needs to happen just once.
-        WLClient.createInstance(this);
 
         // Initialize the challenge handler
-        StepUpUserLoginChallengeHandler.createAndRegister();
-        Log.d(DEBUG_NAME, "createAndRegister-StepUpUserLoginChallengeHandler");
-        StepUpPinCodeChallengeHandler.createAndRegister();
-        Log.d(DEBUG_NAME, "createAndRegister-StepUpPinCodeChallengeHandler");
+        if(!isChallengeHandlersRegistered){
+            WLClient.createInstance(this); // Initialize the MobileFirst SDK. This needs to happen just once.
+            StepUpUserLoginChallengeHandler.createAndRegister();
+            StepUpPinCodeChallengeHandler.createAndRegister();
+            isChallengeHandlersRegistered = true;
+        }
 
         setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -159,7 +163,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         Log.d(DEBUG_NAME, "onPause");
-
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginErrorReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginSuccessReceiver);
