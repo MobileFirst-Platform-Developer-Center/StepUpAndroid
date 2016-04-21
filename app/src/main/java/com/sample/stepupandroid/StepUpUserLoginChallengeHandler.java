@@ -68,11 +68,12 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
     // login
     //********************************
     public void login(JSONObject credentials){
-        Log.d(securityCheckName, "login");
         if(isChallenged){
+            Log.d(securityCheckName, "login-submitChallengeAnswer");
             submitChallengeAnswer(credentials);
         }
         else{
+            Log.d(securityCheckName, "login-login");
             WLAuthorizationManager.getInstance().login(securityCheckName, credentials, new WLLoginResponseListener() {
                 @Override
                 public void onSuccess() {
