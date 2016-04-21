@@ -48,11 +48,11 @@ public class ProtectedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         _this = this;
+        Log.d(DEBUG_NAME, "onCreate");
 
         setContentView(R.layout.activity_protected);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar_with_logout_button);
-
         //Initialize the UI elements
         helloTextView = (TextView) findViewById(R.id.helloTextView);
         getBalanceButton = (Button) findViewById(R.id.getBalance);
@@ -200,6 +200,7 @@ public class ProtectedActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(DEBUG_NAME, "onStart");
         broadcastManager = LocalBroadcastManager.getInstance(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeFailureReceiver, new IntentFilter(Constants.ACTION_PINCODE_FAILURE));
@@ -211,6 +212,7 @@ public class ProtectedActivity extends AppCompatActivity {
     //*****************************************
     @Override
     protected void onPause() {
+        Log.d(DEBUG_NAME, "onPause");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeRequiredReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pincodeFailureReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(loginRequiredReceiver);
@@ -223,6 +225,7 @@ public class ProtectedActivity extends AppCompatActivity {
     public void displayAmountDialog() {
         Runnable run = new Runnable() {
             public void run() {
+                Log.d(DEBUG_NAME, "displayAmountDialog");
                 // Create an AlertDialog to enter transfer amount
                 AlertDialog.Builder builder = new AlertDialog.Builder(_this);
                 builder.setTitle("Enter Amount:");
@@ -254,7 +257,7 @@ public class ProtectedActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(WLFailResponse wlFailResponse) {
                                 Log.d(DEBUG_NAME, "Transfer Failure: " + wlFailResponse.getErrorMsg());
-                                updateTextView("Transfer Failed!");
+                                updateTextView("Transfer Failure: " + wlFailResponse.getErrorMsg());
                             }
                         });
                     }
@@ -279,6 +282,7 @@ public class ProtectedActivity extends AppCompatActivity {
     public void displayPinCodeDialog(final String errorMsg) {
         Runnable run = new Runnable() {
             public void run() {
+                Log.d(DEBUG_NAME, "displayPinCodeDialog");
                 // Create an AlertDialog to enter PinCode
                 AlertDialog.Builder builder = new AlertDialog.Builder(_this);
                 builder.setTitle("Enter pincode:");
