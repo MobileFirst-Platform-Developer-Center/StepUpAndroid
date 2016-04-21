@@ -1,5 +1,6 @@
 package com.sample.stepupandroid;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -269,8 +271,9 @@ public class ProtectedActivity extends AppCompatActivity {
                         updateTextView("");
                     }
                 });
-                // Display the AlertDialog
-                builder.show();
+                AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.show();
             }
         };
         this.runOnUiThread(run);
@@ -311,8 +314,9 @@ public class ProtectedActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-                // Display the AlertDialog
-                builder.show();
+                final AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.show();
             }
         };
         this.runOnUiThread(run);
