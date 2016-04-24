@@ -77,17 +77,6 @@ public class ProtectedActivity extends AppCompatActivity {
         logoutButton = (Button) findViewById(R.id.logout);
         errorMsgTextView = (TextView) findViewById(R.id.errorMsg);
 
-        //Show the display name
-        SharedPreferences preferences = _this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
-        if(preferences.getString(Constants.PREFERENCES_KEY_USER,null) != null){
-            try {
-                JSONObject user = new JSONObject(preferences.getString(Constants.PREFERENCES_KEY_USER,null));
-                helloTextView.setText("Hello " + user.getString("displayName"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
         //*****************************************
         // getBalanceButton - OnClickListener
         //*****************************************
@@ -217,6 +206,16 @@ public class ProtectedActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //Show the display name
+        SharedPreferences preferences = _this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        if(preferences.getString(Constants.PREFERENCES_KEY_USER,null) != null){
+            try {
+                JSONObject user = new JSONObject(preferences.getString(Constants.PREFERENCES_KEY_USER,null));
+                helloTextView.setText("Hello " + user.getString("displayName"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         Log.d(DEBUG_NAME, "onStart");
         broadcastManager = LocalBroadcastManager.getInstance(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(pincodeRequiredReceiver, new IntentFilter(Constants.ACTION_PINCODE_REQUIRED));
