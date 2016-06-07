@@ -23,12 +23,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.worklight.wlclient.api.WLClient;
-import com.worklight.wlclient.api.challengehandler.WLChallengeHandler;
+import com.worklight.wlclient.api.challengehandler.SecurityCheckChallengeHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StepUpPinCodeChallengeHandler extends WLChallengeHandler {
+public class StepUpPinCodeChallengeHandler extends SecurityCheckChallengeHandler {
     private static String securityCheckName = "StepUpPinCode";
     private Context context;
     private LocalBroadcastManager broadcastManager;
@@ -85,7 +85,7 @@ public class StepUpPinCodeChallengeHandler extends WLChallengeHandler {
     //********************************
     public void Cancel() {
         Log.d(securityCheckName, "Cancel");
-        submitFailure(null);
+        cancel();
     }
 
     //********************************

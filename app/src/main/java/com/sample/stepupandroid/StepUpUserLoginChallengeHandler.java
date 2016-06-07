@@ -23,19 +23,17 @@ import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.worklight.wlclient.api.WLAccessTokenListener;
 import com.worklight.wlclient.api.WLAuthorizationManager;
 import com.worklight.wlclient.api.WLClient;
 import com.worklight.wlclient.api.WLFailResponse;
 import com.worklight.wlclient.api.WLLoginResponseListener;
-import com.worklight.wlclient.api.challengehandler.WLChallengeHandler;
-import com.worklight.wlclient.auth.AccessToken;
+import com.worklight.wlclient.api.challengehandler.SecurityCheckChallengeHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
+public class StepUpUserLoginChallengeHandler extends SecurityCheckChallengeHandler {
     private static String securityCheckName = "StepUpUserLogin";
     private String errorMsg = "";
     private Context context;
@@ -54,7 +52,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
         SharedPreferences preferences = context.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(Constants.PREFERENCES_KEY_USER);
-        editor.commit();
+        editor.apply();
 
         // Receive login requests
         broadcastManager.registerReceiver(new BroadcastReceiver() {
@@ -140,7 +138,7 @@ public class StepUpUserLoginChallengeHandler extends WLChallengeHandler {
             SharedPreferences preferences = context.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(Constants.PREFERENCES_KEY_USER, identity.getJSONObject("user").toString());
-            editor.commit();
+            editor.apply();
         } catch (JSONException e) {
             e.printStackTrace();
         }

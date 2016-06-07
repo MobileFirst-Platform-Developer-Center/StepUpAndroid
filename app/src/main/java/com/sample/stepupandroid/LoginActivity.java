@@ -31,14 +31,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.worklight.wlclient.api.WLClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText usernameInput, passwordInput;
-    private Button loginButton;
     private TextView errorMsgDisplay;
 
     private LoginActivity _this;
@@ -68,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(DEBUG_NAME, "onCreate");
 
 
+
         setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
@@ -76,8 +75,9 @@ public class LoginActivity extends AppCompatActivity {
         usernameInput = (EditText)findViewById(R.id.usernameInput);
         passwordInput = (EditText)findViewById(R.id.passwordInput);
         errorMsgDisplay = (TextView)findViewById(R.id.errorMsg);
-        loginButton = (Button)findViewById(R.id.login);
+        Button loginButton = (Button) findViewById(R.id.login);
 
+        assert loginButton != null;
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

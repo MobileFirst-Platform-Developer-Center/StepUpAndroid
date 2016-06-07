@@ -15,7 +15,6 @@ package com.sample.stepupandroid;
  * limitations under the License.
  */
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,7 +28,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -211,7 +209,7 @@ public class ProtectedActivity extends AppCompatActivity {
         if(preferences.getString(Constants.PREFERENCES_KEY_USER,null) != null){
             try {
                 JSONObject user = new JSONObject(preferences.getString(Constants.PREFERENCES_KEY_USER,null));
-                helloTextView.setText("Hello " + user.getString("displayName"));
+                helloTextView.setText(getString(R.string.hello_user, user.getString("displayName")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -261,7 +259,7 @@ public class ProtectedActivity extends AppCompatActivity {
                         }
                         WLResourceRequest request = new WLResourceRequest(adapterPath, WLResourceRequest.POST);
                         // Add the amount as a formParam to the request
-                        HashMap formParams = new HashMap();
+                        HashMap<String,String>  formParams = new HashMap<>();
                         formParams.put("amount", input.getText().toString());
                         request.send(formParams, new WLResponseListener() {
                             @Override
